@@ -1,6 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/js_render.png)](http://badge.fury.io/rb/js_render)
 [![Build Status](https://secure.travis-ci.org/jdlehman/js_render.svg?branch=master)](http://travis-ci.org/jdlehman/js_render)
-[![Dependency Status](https://david-dm.org/jdlehman/js_render.svg)](https://david-dm.org/jdlehman/js_render)
 
 # JsRender
 
