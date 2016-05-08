@@ -1,4 +1,5 @@
 require 'execjs'
+require 'securerandom'
 
 module JsRender
   class Renderer
