@@ -3,7 +3,7 @@ require 'securerandom'
 
 module JsRender
   class Renderer
-    attr_accessor :component_name, :json_data, :uuid
+    attr_reader :component_name, :json_data, :uuid
 
     GLOBAL_CONTEXT = <<-JS
       var global = global || this;
