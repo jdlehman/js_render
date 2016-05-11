@@ -37,7 +37,7 @@ module JsRender
       context = ::ExecJS.compile(GLOBAL_CONTEXT + renderer_code)
       context.eval(server_code)
     rescue ExecJS::RuntimeError, ExecJS::ProgramError => error
-      raise JsRender::ServerRenderError::new(@component_name, @json_data, error)
+      raise Errors::ServerRenderError::new(@component_name, @json_data, error)
     end
 
     def generate_client_script
@@ -78,11 +78,4 @@ module JsRender
     end
   end
 
-  class ServerRenderError < ::StandardError
-    def initialize(component_name, data, message)
-      message = ["Error \"#{message}\" when server rendering component, \"#{component_name}\", with data: \"#{data}\"",
-                 message.backtrace.join("\n")].join("\n")
-      super(message)
-    end
-  end
 end

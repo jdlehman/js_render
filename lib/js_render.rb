@@ -1,5 +1,6 @@
 require 'js_render/version'
 require 'js_render/configuration'
+require 'js_render/errors'
 require 'js_render/renderer'
 
 module JsRender

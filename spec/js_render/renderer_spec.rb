@@ -131,7 +131,7 @@ describe JsRender::Renderer do
 
     context 'with ExecJS error' do
       it 'returns HTML string' do
-        expect{error_renderer.generate_html}.to raise_error(JsRender::ServerRenderError)
+        expect{error_renderer.generate_html}.to raise_error(JsRender::Errors::ServerRenderError)
       end
     end
   end
