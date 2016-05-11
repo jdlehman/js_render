@@ -33,7 +33,7 @@ module JsRender
           return '<span id="#{@uuid}">' + serverStr + '</span>';
         })()
       JS
-      renderer_code = js_context(find_renderer)
+      renderer_code = js_context(find_renderer_files)
       context = ::ExecJS.compile(GLOBAL_CONTEXT + renderer_code)
       context.eval(server_code)
     rescue ExecJS::RuntimeError, ExecJS::ProgramError => error
@@ -52,7 +52,7 @@ module JsRender
 
     private
 
-    def find_renderer
+    def find_renderer_files
       base_path = JsRender.config.base_path
       paths = JsRender.config.component_paths
       suffix = JsRender.config.component_suffix
@@ -65,16 +65,12 @@ module JsRender
     end
 
     def js_context(paths)
-      if defined?(::Rails) && JsRender.config.use_asset_pipeline
-        ::Rails.application.assets.each_file.select do |abs_path|
-          regex = ::Regexp.new(paths.join('|'))
-          abs_path.match(regex)
-        end.map do |abs_path|
-          ::Rails.application.assets[abs_path].to_s
-        end.join('')
+      asset_finder = if defined?(::Rails) && JsRender.config.use_asset_pipeline
+        Rails::AssetFinder.new
       else
-        paths.map { |path| File.read(path) }.join('')
+        AssetFinder::Base.new
       end
+      paths.map { |path| asset_finder.find path }.join('')
     end
   end
 

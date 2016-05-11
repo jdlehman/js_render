@@ -11,5 +11,8 @@ module JsRender
         super(message)
       end
     end
+
+    # Will be thrown when asset file cannot be found
+    class AssetFileNotFound < JsRender::Error; end
   end
 end

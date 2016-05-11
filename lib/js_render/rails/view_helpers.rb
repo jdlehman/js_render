@@ -1,5 +1,3 @@
-require 'js_render/renderer'
-
 module JsRender
   module Rails
     module ViewHelpers
