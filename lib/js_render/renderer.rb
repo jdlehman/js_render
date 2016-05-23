@@ -3,7 +3,7 @@ require 'securerandom'
 
 module JsRender
   class Renderer
-    attr_reader :component_name, :json_data, :uuid
+    attr_reader :component_name, :json_data, :uuid, :asset_finder
 
     GLOBAL_CONTEXT = <<-JS
       var global = global || this;
@@ -33,7 +33,7 @@ module JsRender
           return '<span id="#{@uuid}">' + serverStr + '</span>';
         })()
       JS
-      renderer_code = js_context(find_renderer_files)
+      renderer_code = asset_finder.read_files(@component_name)
       context = ::ExecJS.compile(GLOBAL_CONTEXT + renderer_code)
       context.eval(server_code)
     rescue ExecJS::RuntimeError, ExecJS::ProgramError => error
@@ -52,26 +52,15 @@ module JsRender
 
     private
 
-    def find_renderer_files
-      base_path = JsRender.config.base_path
-      paths = JsRender.config.component_paths
-      suffix = JsRender.config.component_suffix
-
-      paths.map do |path|
-        Dir[File.join(base_path, path)].select do |full_path|
-          full_path.match Regexp.new("/#{@component_name}#{suffix}")
+    def asset_finder
+      @asset_finder ||=
+        if JsRender.config.asset_finder_class
+          JsRender.config.asset_finder_class.new
+        elsif defined?(::Rails) && JsRender.config.use_asset_pipeline
+          Rails::AssetFinder.new
+        else
+          AssetFinder::Base.new
         end
-      end.compact.flatten.uniq
-    end
-
-    def js_context(paths)
-      asset_finder = if defined?(::Rails) && JsRender.config.use_asset_pipeline
-        Rails::AssetFinder.new
-      else
-        AssetFinder::Base.new
-      end
-      paths.map { |path| asset_finder.find path }.join('')
     end
   end
-
 end

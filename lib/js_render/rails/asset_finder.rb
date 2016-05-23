@@ -2,11 +2,12 @@ module JsRender
   module Rails
     class AssetFinder < ::JsRender::AssetFinder::Base
       def initialize
+        super
         @environment = ::Rails.application.assets
         @manifest = ::Rails.application.assets_manifest
       end
 
-      def find(path)
+      def read(path)
         logical_path = path.gsub('app/assets/javascripts/', '')
         if @environment
           @environment[logical_path].to_s

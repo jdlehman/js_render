@@ -133,6 +133,25 @@ If you want the component name to be included in the name dynamically, you can u
 
 > Defaults to `window.render*Client` (eg for `MyComponent`, `window.renderMyComponentClient`)
 
+**asset_finder_class**
+
+`JsRender::Renderer` uses the `JsRender::AssetFinder::Base` class to find and read JS asset files it needs to generate the server HTML (with the server render function). If `use_asset_pipeline` is true, it will use `JSRender::Rails::AssetFinder` instead, which just overrides the `read` method. The `asset_finder_class` configuration option provides a hook to override how the JS assets are found or read.
+
+You can either provide a new class that provides a `#read_files` method (takes a component name and returns a string of JS from the files that component needs to render) or you can subclass `JsRender::AssetFinder::Base`.
+
+Methods you can override if you subclass `JsRender::AssetFinder::Base`:
+
+- `Base#find_files` takes the component name as a string and returns a list of paths to files.
+ - This method can be overridden to change how files are looked up, or to transform the pathnames (which might be useful if your JS assets are built outside of the asset pipeline or to another directory.
+
+- `Base#read_files` takes the component name as a string and calls `Base#find_files` to get all the files. It then reads each of these files with `Base#read`, concatenates them together and returns a string. This is the method that is actually used directly by `JsRender::Renderer`.
+ - This method will rarely need to be overridden as you can change the behavior of `Base#find_files` and `Base#read`.
+
+- `Base#read` takes a path as a string and returns the file contents as a string.
+ - This method can be overridden to apply a transformation on the contents of the file (like compiling ES2015 to ES5).
+
+> Defaults to `nil`
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

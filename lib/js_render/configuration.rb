@@ -21,7 +21,8 @@ module JsRender
                   :component_suffix,
                   :server_render_function,
                   :client_render_function,
-                  :use_asset_pipeline
+                  :use_asset_pipeline,
+                  :asset_finder_class
 
     def initialize
       @base_path = 'app/assets/javascripts'
@@ -30,6 +31,7 @@ module JsRender
       @server_render_function = 'window.render*Server'
       @client_render_function = 'window.render*Client'
       @use_asset_pipeline = false
+      @asset_finder_class = nil
     end
   end
 end
