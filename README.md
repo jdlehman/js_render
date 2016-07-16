@@ -3,8 +3,6 @@
 
 # JsRender
 
-**Disclaimer: This is currently a "work in progress". More functionality, improvements, and docs are coming. That said everything does work, but the API might change in the near future. Check out the docs below as well as the [`examples`](./examples).**
-
 JsRender is an unopinionated Ruby library for rendering JavaScript "components" on the server side. This approach works with [React](https://facebook.github.io/react/), [Angular](ihttps://angular.io/), [Ember](http://emberjs.com/), or any other library of your choice. The only requirement is that there is a JavaScript function that returns HTML for the component or view such that it can be properly rendered on the server side (e.g. [`ReactDOMServer.renderToString`](https://facebook.github.io/react/docs/top-level-api.html#reactdomserver.rendertostring) in React).
 
 The library works in two essential parts:
