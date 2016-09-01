@@ -150,6 +150,12 @@ Methods you can override if you subclass `JsRender::AssetFinder::Base`:
 
 > Defaults to `nil`
 
+** should_server_render **
+
+This config option is a boolean that specifies if the server render function and associated JS should be executed and run. When it is false, it only returns the span with the unique ID that the client side render function relies upon. This is meant for development purposes and enables things like console logging etc. that would normally cause errors in the `ExecJS` runtime.
+
+> Defaults to `true`
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

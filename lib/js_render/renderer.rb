@@ -26,6 +26,8 @@ module JsRender
     end
 
     def generate_html
+      return "<span id=\"#{@uuid}\"></span>" unless JsRender.config.should_server_render
+
       func_name = JsRender.config.server_render_function.gsub('*', @component_name)
       server_code = <<-JS
         (function () {

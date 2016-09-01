@@ -40,6 +40,7 @@ describe JsRender::Configuration do
       expect(config.client_render_function).to eq 'window.render*Client'
       expect(config.use_asset_pipeline).to eq false
       expect(config.asset_finder_class).to eq nil
+      expect(config.should_server_render).to eq true
     end
   end
 end

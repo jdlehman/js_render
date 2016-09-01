@@ -54,6 +54,13 @@ describe JsRender::Renderer do
   end
 
   describe '#generate_html' do
+    context 'should_server_render config is false' do
+      it 'returns an empty span' do
+        JsRender.config.should_server_render = false
+        expect(todo_renderer.generate_html).to eq "<span id=\"#{stubbed_uuid}\"></span>"
+      end
+    end
+
     context 'server render function undefined' do
       it 'returns an empty span' do
         JsRender.config.server_render_function = 'notHere'
