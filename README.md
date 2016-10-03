@@ -150,7 +150,7 @@ Methods you can override if you subclass `JsRender::AssetFinder::Base`:
 
 > Defaults to `nil`
 
-** key_transforms **
+**key_transforms**
 
 An array of lambdas (or singletons that implement a `call` method) that can transform the keys of the data being passed into the component. The lambdas in the array are called in order, and the result of a lambda is passed to the next transform (as a string) for each key.
 
@@ -172,7 +172,7 @@ JsRender.config.key_transforms = [
 
 > Defaults to `[]`
 
-** should_server_render **
+**should_server_render**
 
 This config option is a boolean that specifies if the server render function and associated JS should be executed and run. When it is false, it only returns the span with the unique ID that the client side render function relies upon. This is meant for development purposes and enables things like console logging etc. that would normally cause errors in the `ExecJS` runtime.
 
