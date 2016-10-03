@@ -150,6 +150,28 @@ Methods you can override if you subclass `JsRender::AssetFinder::Base`:
 
 > Defaults to `nil`
 
+** key_transforms **
+
+An array of lambdas (or singletons that implement a `call` method) that can transform the keys of the data being passed into the component. The lambdas in the array are called in order, and the result of a lambda is passed to the next transform (as a string) for each key.
+
+`JsRender::Utils::Camelize` is a provided utility that will transform keys to camel case.
+
+Note: This only works if the component data is passed in as a hash, if it is already passed in as JSON, then the transforms will be ignored.
+
+Example:
+
+```ruby
+JsRender.config.key_transforms = [
+  JsRender::Utils::Camelize,
+  -> (key) { key + '_SomeEnding'}
+]
+
+# data => { camel_case: 2, something_else: 3 }
+# would be transformed to => { camelCase_SomeEnding: 2, somethingElse_SomeEnding: 3 }
+```
+
+> Defaults to `[]`
+
 ** should_server_render **
 
 This config option is a boolean that specifies if the server render function and associated JS should be executed and run. When it is false, it only returns the span with the unique ID that the client side render function relies upon. This is meant for development purposes and enables things like console logging etc. that would normally cause errors in the `ExecJS` runtime.
