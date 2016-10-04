@@ -51,6 +51,14 @@ describe JsRender::Renderer do
         expect{JsRender::Renderer.new 'MyComponent', Object.new}.to raise_error(NoMethodError)
       end
     end
+
+    context 'has key_transforms config' do
+      it 'transforms keys' do
+        JsRender.config.key_transforms = [JsRender::Utils::Camelize, ->(key) { key + "Ending" }]
+        renderer = JsRender::Renderer.new 'MyComponent', {lower_case: 1, make_me_a_camel: 2, alreadyCamel: 3}
+        expect(renderer.json_data).to eq '{"lowerCaseEnding":1,"makeMeACamelEnding":2,"alreadyCamelEnding":3}'
+      end
+    end
   end
 
   describe '#generate_html' do

@@ -13,7 +13,10 @@ module JsRender
 
     def initialize(component_name, data)
       @component_name = component_name
-      data = data.to_json if !data.is_a?(String)
+      unless data.is_a?(String)
+        transform_keys(data)
+        data = data.to_json
+      end
       @json_data = data
       @uuid = SecureRandom.uuid
     end
@@ -63,6 +66,14 @@ module JsRender
         else
           AssetFinder::Base.new
         end
+    end
+
+    def transform_keys(data)
+      JsRender.config.key_transforms.reduce(data) do |transformed_data, transform|
+        transformed_data.tap do |d|
+          d.keys.each { |k| d[transform.call(k.to_s)] = d.delete(k) }
+        end
+      end
     end
   end
 end
