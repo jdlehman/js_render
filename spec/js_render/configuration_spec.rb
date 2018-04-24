@@ -41,6 +41,8 @@ describe JsRender::Configuration do
       expect(config.use_asset_pipeline).to eq false
       expect(config.asset_finder_class).to eq nil
       expect(config.should_server_render).to eq true
+      expect(config.cache_size).to eq 100
+      expect(config.cache_ttl).to eq 600
     end
   end
 end

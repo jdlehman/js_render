@@ -1,9 +1,12 @@
 require 'execjs'
 require 'securerandom'
+require 'lru_redux'
 
 module JsRender
   class Renderer
     attr_reader :component_name, :json_data, :uuid, :asset_finder
+
+    @@cache = LruRedux::TTL::ThreadSafeCache.new(JsRender.config.cache_size, JsRender.config.cache_ttl)
 
     GLOBAL_CONTEXT = <<-JS
       var global = global || this;
@@ -38,8 +41,6 @@ module JsRender
           return '<span id="#{@uuid}">' + serverStr + '</span>';
         })()
       JS
-      renderer_code = asset_finder.read_files(@component_name)
-      context = ::ExecJS.compile(GLOBAL_CONTEXT + renderer_code)
       context.eval(server_code)
     rescue ExecJS::RuntimeError, ExecJS::ProgramError => error
       raise Errors::ServerRenderError::new(@component_name, @json_data, error)
@@ -56,6 +57,16 @@ module JsRender
 
 
     private
+
+    def context
+      base_path = JsRender.config.base_path
+      paths = JsRender.config.component_paths
+      suffix = JsRender.config.component_suffix
+      @@cache.getset(base_path + paths.join('') + suffix + @component_name) do
+        renderer_code = asset_finder.read_files(@component_name)
+        ExecJS.compile(GLOBAL_CONTEXT + renderer_code)
+      end
+    end
 
     def asset_finder
       @asset_finder ||=

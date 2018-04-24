@@ -101,8 +101,7 @@ This is the base path where your components live.
 
 **component_paths**
 
-These are the paths off of your base path that are searched to find your component (or more accurately your components' server render functions). Wildcards are supported.
-
+These are the paths off of your base path that are searched to find your component (or more accurately your components' server render functions). Wildcards are supported.  
 If you are using Rails AND the asset pipeline, the lookup path can point to your pre-built file and the asset pipeline will give JsRender the built file. If you are using another build tool, make sure you are pointing to the built assets. JsRender will NOT take care of any compile step for you, it expects these files to already be compiled to ES5 compatible with [ExecJS](https://github.com/rails/execjs).
 
 > Defaults to `['/**/*']`
@@ -177,6 +176,18 @@ JsRender.config.key_transforms = [
 This config option is a boolean that specifies if the server render function and associated JS should be executed and run. When it is false, it only returns the span with the unique ID that the client side render function relies upon. This is meant for development purposes and enables things like console logging etc. that would normally cause errors in the `ExecJS` runtime.
 
 > Defaults to `true`
+
+**cache_size**
+
+Since ExecJS is expensive, components are cached. This controls the number of items to keep in the LRU (least recently used) cache, where the least recently used is evicted.
+
+> Defaults to 100
+
+**cache_ttl**
+
+Since ExecJS is expensive, components are cached. This controls the TTL (in seconds) of items in the LRU (least recently used) cache, where items are evicted once the TTL is reached.
+
+> Defaults to 600 seconds (10 minutes)
 
 ## Development
 
