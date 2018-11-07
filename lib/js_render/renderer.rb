@@ -12,7 +12,11 @@ module JsRender
       var global = global || this;
       var self = self || this;
       var window = window || this;
+      var console = console || { history: [] };
     JS
+
+    CONSOLE_POLYFILL = File.read(File.join(File.dirname(__FILE__), 'polyfills', 'console_polyfill.js'))
+    CONSOLE_REPLAY = File.read(File.join(File.dirname(__FILE__), 'polyfills', 'console_replay.js'))
 
     def initialize(component_name, data)
       @component_name = component_name
@@ -38,7 +42,8 @@ module JsRender
       server_code = <<-JS
         (function () {
           var serverStr = typeof #{func_name} === 'function' ? #{func_name}(#{@json_data}) : '';
-          return '<span id="#{@uuid}">' + serverStr + '</span>';
+          var consoleReplayStr = #{CONSOLE_REPLAY};
+          return '<span id="#{@uuid}">' + serverStr + '</span>' + consoleReplayStr;
         })()
       JS
       context.eval(server_code)
@@ -64,7 +69,7 @@ module JsRender
       suffix = JsRender.config.component_suffix
       @@cache.getset(base_path + paths.join('') + suffix + @component_name) do
         renderer_code = asset_finder.read_files(@component_name)
-        ExecJS.compile(GLOBAL_CONTEXT + renderer_code)
+        ExecJS.compile(GLOBAL_CONTEXT + CONSOLE_POLYFILL + renderer_code)
       end
     end
 
