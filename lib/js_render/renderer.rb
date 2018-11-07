@@ -15,8 +15,8 @@ module JsRender
       var console = console || { history: [] };
     JS
 
-    CONSOLE_POLYFILL = File.read(File.join(File.dirname(__FILE__), 'console_polyfill.js'))
-    CONSOLE_REPLAY = File.read(File.join(File.dirname(__FILE__), 'console_replay.js'))
+    CONSOLE_POLYFILL = File.read(File.join(File.dirname(__FILE__), 'polyfills', 'console_polyfill.js'))
+    CONSOLE_REPLAY = File.read(File.join(File.dirname(__FILE__), 'polyfills', 'console_replay.js'))
 
     def initialize(component_name, data)
       @component_name = component_name
