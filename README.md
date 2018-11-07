@@ -101,7 +101,7 @@ This is the base path where your components live.
 
 **component_paths**
 
-These are the paths off of your base path that are searched to find your component (or more accurately your components' server render functions). Wildcards are supported.  
+These are the paths off of your base path that are searched to find your component (or more accurately your components' server render functions). Wildcards are supported.
 If you are using Rails AND the asset pipeline, the lookup path can point to your pre-built file and the asset pipeline will give JsRender the built file. If you are using another build tool, make sure you are pointing to the built assets. JsRender will NOT take care of any compile step for you, it expects these files to already be compiled to ES5 compatible with [ExecJS](https://github.com/rails/execjs).
 
 > Defaults to `['/**/*']`
